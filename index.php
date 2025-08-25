@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 }
 
 // urlパラメータがある場合はプロキシとして動作
-if ($allow && isset($_GET['url'])) {
+if ($allow && isset($_GET['url']) && (isset($_GET['token']) && $_GET['token'] === '23uQf8FIcG_U0Nnr')) {
   // GETリクエストのみ許可
   if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(400);
