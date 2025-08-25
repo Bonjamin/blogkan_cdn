@@ -7,9 +7,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
     $allow = true;
   }
 }
+if (isset($_GET['token']) && $_GET['token'] === '23uQf8FIcG_U0Nnr') {
+  $allow = true;
+}
 
 // urlパラメータがある場合はプロキシとして動作
-if ($allow && isset($_GET['url']) && (isset($_GET['token']) && $_GET['token'] === '23uQf8FIcG_U0Nnr')) {
+if ($allow && isset($_GET['url'])) {
   // GETリクエストのみ許可
   if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(400);
@@ -82,13 +85,9 @@ if ($allow && isset($_GET['url']) && (isset($_GET['token']) && $_GET['token'] ==
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>CDN Proxy Test</title>
+  <title>blogkan CDN</title>
 </head>
 <body>
-  <h1>CDN Proxy テスト</h1>
-  <form method="get" action="">
-    <label>取得したいURL: <input type="text" name="url" size="60" value="https://www.example.com/"></label>
-    <button type="submit">取得</button>
-  </form>
+  <h1>blogkan CDN</h1>
 </body>
 </html>
