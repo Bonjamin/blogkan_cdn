@@ -27,9 +27,29 @@ class Url extends BaseController
     
     $decoded_url = $url ? urldecode($url) : null;
     
-    if (proxy_allowed() && $decoded_url) {
+    // デバッグ情報を追加
+    $is_allowed = proxy_allowed();
+    $referer = $_SERVER['HTTP_REFERER'] ?? 'No referer';
+    $token = $_GET['token'] ?? 'No token';
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'No user agent';
+    
+    // 本番環境でのデバッグ
+    if (!$is_allowed) {
+      log_message('error', "Proxy not allowed - URL: {$decoded_url}, Referer: {$referer}, Token: {$token}, UA: {$user_agent}");
+    }
+    
+    if ($is_allowed && $decoded_url) {
       return proxy_request($decoded_url, $this->request, $this->response);
     }
-    return 'Invalid or not allowed.';
+    
+    // より詳細なエラーメッセージ
+    $error_msg = 'Invalid or not allowed.';
+    if (!$decoded_url) {
+      $error_msg .= ' (No URL provided)';
+    } elseif (!$is_allowed) {
+      $error_msg .= ' (Access denied - check referer or token)';
+    }
+    
+    return $error_msg;
   }
 }
