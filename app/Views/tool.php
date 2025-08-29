@@ -31,7 +31,7 @@
       
       // URLをエンコードしてプロキシURLを生成
       const encodedUrl = encodeURIComponent(url);
-      const proxyUrl = `${window.location.origin}/url/${encodedUrl}`;
+      const proxyUrl = `https://blogkan.com/cdn/url/${encodedUrl}`;
       
       // 生成されたURLを表示
       document.getElementById('urlOutput').textContent = proxyUrl;
