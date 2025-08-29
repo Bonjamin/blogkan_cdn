@@ -17,4 +17,9 @@ class Home extends BaseController
     {
         return view('test');
     }
+
+    public function tool(): string
+    {
+        return view('tool');
+    }
 }

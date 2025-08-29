@@ -7,4 +7,5 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('test', 'Home::test');
+$routes->get('tool', 'Home::tool');
 $routes->get('url/(.+)', 'Url::index/$1');
