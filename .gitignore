@@ -1,3 +1,5 @@
 .well-known/
 .env
-writable/
+writable/cache/*
+writable/debugbar/*
+writable/logs/*
