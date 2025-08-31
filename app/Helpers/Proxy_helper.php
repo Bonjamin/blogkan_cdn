@@ -20,13 +20,8 @@ if (!function_exists('proxy_allowed')) {
       }
     }
     
-    if (isset($_GET['token']) && $_GET['token'] === '23uQf8FIcG_U0Nnr') {
+    if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '23uQf8FIcG_U0Nnr') !== false) {
       $allow = true;
-    } else if (isset($_SERVER['QUERY_STRING'])) {
-      parse_str($_SERVER['QUERY_STRING'], $query_params);
-      if (isset($query_params['token']) && $query_params['token'] === '23uQf8FIcG_U0Nnr') {
-        $allow = true;
-      }
     }
     
     return $allow;
