@@ -93,6 +93,9 @@ if (!function_exists('proxy_request')) {
           } elseif (strtolower($header_name) === 'set-cookie') {
             // Set-Cookieは複数行対応
             $response->addHeader($header_name, $header_value);
+          } elseif (strtolower($header_name) === 'cache-control') {
+            // キャッシュは無条件でpublic, max-age=10368000
+            $response->setHeader($header_name, 'public, max-age=10368000');
           } else {
             $response->setHeader($header_name, $header_value);
           }
