@@ -19,9 +19,16 @@ if (!function_exists('proxy_allowed')) {
         $allow = true;
       }
     }
+    
     if (isset($_GET['token']) && $_GET['token'] === '23uQf8FIcG_U0Nnr') {
       $allow = true;
+    } else if (isset($_SERVER['QUERY_STRING'])) {
+      parse_str($_SERVER['QUERY_STRING'], $query_params);
+      if (isset($query_params['token']) && $query_params['token'] === '23uQf8FIcG_U0Nnr') {
+        $allow = true;
+      }
     }
+    
     return $allow;
   }
 }
