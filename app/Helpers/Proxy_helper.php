@@ -15,7 +15,7 @@ if (!function_exists('proxy_allowed')) {
     $allow = false;
     if (isset($_SERVER['HTTP_REFERER'])) {
       $ref = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-      if ($ref && (strpos($ref, 'blogkan.com') !== false || strpos($ref, 'ai-gazoukan.com') !== false)) {
+      if ($ref && (strpos($ref, 'blogkan.com') !== false || strpos($ref, 'ai-gazoukan.com') !== false || strpos($ref, 'cloudfront.net') !== false)) {
         $allow = true;
       }
     }
