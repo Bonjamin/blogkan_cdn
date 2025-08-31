@@ -106,6 +106,11 @@ if (!function_exists('proxy_request')) {
     if (!$content_type_set) {
       $response->setContentType('application/octet-stream');
     }
+    
+    // CodeIgniterのデフォルトのnoCache()を上書きして、適切なCache-Controlを設定
+    $response->removeHeader('Cache-Control');
+    $response->setHeader('Cache-Control', 'public, max-age=10368000');
+    
     return $response->setBody($response_body);
   }
 }
