@@ -10,22 +10,22 @@ if (!function_exists('create_error_html')) {
 }
 
 if (!function_exists('proxy_allowed')) {
-  function proxy_allowed(): bool
-  {
-    $allow = false;
-    if (isset($_SERVER['HTTP_REFERER'])) {
-      $ref = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-      if ($ref && (strpos($ref, 'blogkan.com') !== false || strpos($ref, 'ai-gazoukan.com') !== false || strpos($ref, 'cloudfront.net') !== false)) {
-        $allow = true;
-      }
-    }
+  // function proxy_allowed(): bool
+  // {
+  //   $allow = false;
+  //   if (isset($_SERVER['HTTP_REFERER'])) {
+  //     $ref = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+  //     if ($ref && (strpos($ref, 'blogkan.com') !== false || strpos($ref, 'ai-gazoukan.com') !== false || strpos($ref, 'cloudfront.net') !== false)) {
+  //       $allow = true;
+  //     }
+  //   }
     
-    if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '23uQf8FIcG_U0Nnr') !== false) {
-      $allow = true;
-    }
+  //   if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '23uQf8FIcG_U0Nnr') !== false) {
+  //     $allow = true;
+  //   }
     
-    return $allow;
-  }
+  //   return $allow;
+  return true;
 }
 
 if (!function_exists('proxy_request')) {
@@ -94,8 +94,7 @@ if (!function_exists('proxy_request')) {
             // Set-Cookieは複数行対応
             $response->addHeader($header_name, $header_value);
           } elseif (strtolower($header_name) === 'cache-control') {
-            // キャッシュは無条件でpublic, max-age=10368000
-            $response->setHeader($header_name, 'public, max-age=10368000');
+            continue;
           } else {
             $response->setHeader($header_name, $header_value);
           }
@@ -108,9 +107,14 @@ if (!function_exists('proxy_request')) {
     }
     
     // CodeIgniterのデフォルトのnoCache()を上書きして、適切なCache-Controlを設定
-    $response->removeHeader('Cache-Control');
     $response->setHeader('Cache-Control', 'public, max-age=10368000');
-    
+
+    if (!$response->hasHeader('Expires')) {
+      // Cache-Controlと同じ期間のExpiresヘッダを設定
+      $expires = gmdate('D, d M Y H:i:s', time() + 10368000) . ' GMT';
+      $response->setHeader('Expires', $expires);
+    }
+
     return $response->setBody($response_body);
   }
 }
