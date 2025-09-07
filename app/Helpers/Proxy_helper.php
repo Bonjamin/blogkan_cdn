@@ -10,8 +10,8 @@ if (!function_exists('create_error_html')) {
 }
 
 if (!function_exists('proxy_allowed')) {
-  // function proxy_allowed(): bool
-  // {
+  function proxy_allowed(): bool
+  {
   //   $allow = false;
   //   if (isset($_SERVER['HTTP_REFERER'])) {
   //     $ref = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
@@ -26,6 +26,7 @@ if (!function_exists('proxy_allowed')) {
     
   //   return $allow;
   return true;
+  }
 }
 
 if (!function_exists('proxy_request')) {
