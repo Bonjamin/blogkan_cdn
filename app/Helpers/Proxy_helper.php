@@ -101,6 +101,15 @@ if (!function_exists('proxy_request')) {
           } elseif (strtolower($header_name) === 'cache-control') {
             // オリジナルのcache-controlヘッダーをスキップ（後で独自に設定）
             continue;
+          } elseif (strtolower($header_name) === 'etag') {
+            // ETagをスキップ（プロキシ処理により内容が変わる可能性があるため）
+            continue;
+          } elseif (strtolower($header_name) === 'last-modified') {
+            // Last-Modifiedをスキップ（プロキシ処理により内容が変わる可能性があるため）
+            continue;
+          } elseif (strtolower($header_name) === 'vary') {
+            // Varyヘッダーをスキップ（CloudFrontのキャッシュキーに影響するため）
+            continue;
           } else {
             $response->setHeader($header_name, $header_value);
           }
@@ -111,6 +120,14 @@ if (!function_exists('proxy_request')) {
     // 既存のCache-Controlヘッダーを削除してから設定
     $response->removeHeader('Cache-Control');
     $response->setHeader('Cache-Control', 'public, max-age=10368000');
+
+    // CloudFrontでのキャッシュを改善するために独自のETagを生成
+    $etag = '"' . md5($targetUrl . $width . $height) . '"';
+    $response->setHeader('ETag', $etag);
+    
+    // Last-Modifiedを現在時刻から1時間前に設定（キャッシュ効率を上げるため）
+    $last_modified = gmdate('D, d M Y H:i:s', time() - 3600) . ' GMT';
+    $response->setHeader('Last-Modified', $last_modified);
 
     if (!$response->hasHeader('Expires')) {
       // Cache-Controlと同じ期間のExpiresヘッダを設定
