@@ -99,14 +99,17 @@ if (!function_exists('proxy_request')) {
             // Set-Cookieは複数行対応
             $response->addHeader($header_name, $header_value);
           } elseif (strtolower($header_name) === 'cache-control') {
+            // オリジナルのcache-controlヘッダーをスキップ（後で独自に設定）
             continue;
           } else {
             $response->setHeader($header_name, $header_value);
           }
         }
       }
-    }    
+    }
     // CodeIgniterのデフォルトのnoCache()を上書きして、適切なCache-Controlを設定
+    // 既存のCache-Controlヘッダーを削除してから設定
+    $response->removeHeader('Cache-Control');
     $response->setHeader('Cache-Control', 'public, max-age=10368000');
 
     if (!$response->hasHeader('Expires')) {
