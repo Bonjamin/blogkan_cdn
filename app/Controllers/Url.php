@@ -25,16 +25,14 @@ class Url extends BaseController
       }
     }
     
-    $decoded_url = $url ? urldecode($url) : null;
-    
     $is_allowed = proxy_allowed();
     
-    if ($is_allowed && $decoded_url) {
-      return proxy_request($decoded_url, $this->request, $this->response);
+    if ($is_allowed && $url) {
+      return proxy_request($url, $this->request, $this->response);
     }
 
     $error_msg = 'Invalid or not allowed.';
-    if (!$decoded_url) {
+    if (!$url) {
       $error_msg .= ' (No URL provided)';
     } elseif (!$is_allowed) {
       $error_msg .= ' (Access denied)';

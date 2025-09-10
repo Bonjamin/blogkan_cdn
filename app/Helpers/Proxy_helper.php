@@ -41,12 +41,16 @@ if (!function_exists('proxy_request')) {
       $response->setStatusCode(400);
       return 'Invalid URL';
     }
+    
+    // Thumbor URL に変換
+    $thumbor_url = 'https://thumbor-635312213978.asia-northeast1.run.app/unsafe/480x640/filters:format(webp)/' . $targetUrl;
+    
     $headers = [];
     foreach ($request->headers() as $name => $value) {
       if (strtolower($name) === 'host') continue;
       $headers[] = "$name: " . $value->getValue();
     }
-    $ch = curl_init($targetUrl);
+    $ch = curl_init($thumbor_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -101,12 +105,7 @@ if (!function_exists('proxy_request')) {
           }
         }
       }
-    }
-    // Content-Typeが明示的に設定されていない場合のみデフォルト値を設定
-    if (!$content_type_set) {
-      $response->setContentType('application/octet-stream');
-    }
-    
+    }    
     // CodeIgniterのデフォルトのnoCache()を上書きして、適切なCache-Controlを設定
     $response->setHeader('Cache-Control', 'public, max-age=10368000');
 
