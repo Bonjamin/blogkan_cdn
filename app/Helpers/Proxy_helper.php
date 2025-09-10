@@ -69,8 +69,11 @@ if (!function_exists('proxy_request')) {
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if ($http_code < 200 || $http_code >= 300) {
-      $response->setStatusCode($http_code);
-      return create_error_html('レスポンスエラー', 'HTTP status: ' . $http_code);
+      // $response->setStatusCode($http_code);
+      // return create_error_html('レスポンスエラー', 'HTTP status: ' . $http_code);
+      $decoded_url = urldecode($targetUrl);
+      $response->redirect($decoded_url);
+      return;
     }
     $lines = explode("\r\n", $response_headers);
     $content_type_set = false;
