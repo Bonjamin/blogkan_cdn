@@ -30,7 +30,7 @@ if (!function_exists('proxy_allowed')) {
 }
 
 if (!function_exists('proxy_request')) {
-  function proxy_request($targetUrl, $request, $response)
+  function proxy_request($targetUrl, $request, $response, $width = 640, $height = 480)
   {
     if (strtoupper($request->getMethod()) !== 'GET') {
       $response->setStatusCode(400);
@@ -43,8 +43,8 @@ if (!function_exists('proxy_request')) {
     }
     
     // Thumbor URL に変換
-    $thumbor_url = 'https://thumbor-635312213978.asia-northeast1.run.app/unsafe/480x640/filters:format(webp)/' . $targetUrl;
-    
+    $thumbor_url = 'https://thumbor-635312213978.asia-northeast1.run.app/unsafe/' . $width . 'x' . $height . '/filters:format(webp)/' . $targetUrl;
+
     $headers = [];
     foreach ($request->headers() as $name => $value) {
       if (strtolower($name) === 'host') continue;
