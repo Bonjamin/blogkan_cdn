@@ -28,7 +28,16 @@ class Url extends BaseController
     $is_allowed = proxy_allowed();
     
     if ($is_allowed && $url) {
-      return proxy_request($url, $this->request, $this->response);
+      // GETクエリからwidth, heightを取得
+      $width = $this->request->getVar('w');
+      $height = $this->request->getVar('h');
+      
+      // 両方とも0以上の場合のみwidthとheightを渡す
+      if ($width !== null && $height !== null && $width >= 0 && $height >= 0) {
+        return proxy_request($url, $this->request, $this->response, (int)$width, (int)$height);
+      } else {
+        return proxy_request($url, $this->request, $this->response);
+      }
     }
 
     $error_msg = 'Invalid or not allowed.';
